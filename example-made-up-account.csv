@@ -1,0 +1,15 @@
+Example: made-up account
+Search terms report
+"October 1, 2026 - October 31, 2026"
+Search term,Campaign,Ad group,Keyword,Currency code,Cost,Clicks,Conversions
+emergency plumber near me,Search,Emergency,[emergency plumber],USD,"1,200.50",100,2
+plumber jobs,Search,Emergency,[emergency plumber],USD,60.00,12,0
+apprentice plumber jobs,Search,Emergency,[emergency plumber],USD,30.00,6,0
+free plumbing video,Search,Emergency,[emergency plumber],USD,35.00,7,0
+free estimate plumber,Search,Quotes,"""free estimate""",USD,50.00,10,1.5
+pipe help,Search,Emergency,[emergency plumber],USD,10.00,2,0
+sample river plumbing,Search,Brand,[local plumber],USD,20.00,4,0
+diy drain repair,Search,Drains,[drain service],USD,15.00,3,0
+Total: Search terms,,,,USD,"1,420.50",144,3.5
+Total: Other search terms,,,,USD,250.00,51,1
+Total: Account,,,,USD,"1,670.50",195,4.5

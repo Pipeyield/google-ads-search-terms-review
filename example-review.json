@@ -1,0 +1,21 @@
+{
+  "rows": [
+    {"id": 1, "bucket": "buyer"},
+    {"id": 2, "bucket": "off-target", "exclude_reason": "The search is for a plumbing job."},
+    {"id": 3, "bucket": "off-target", "exclude_reason": "The search is for a plumbing apprenticeship job."},
+    {"id": 4, "bucket": "off-target", "exclude_reason": "The search is for a free video about plumbing."},
+    {"id": 5, "bucket": "buyer"},
+    {"id": 6, "bucket": "unsure", "check_reason": "The search could be for advice or a plumber."},
+    {"id": 7, "bucket": "buyer", "keep_reason": "The search names the business."},
+    {"id": 8, "bucket": "off-target", "exclude_reason": "The search asks for do-it-yourself drain repair."}
+  ],
+  "negatives": [
+    {"negative": "jobs", "match_type": "phrase"},
+    {"negative": "plumber jobs", "match_type": "exact"},
+    {"negative": "free", "match_type": "phrase"},
+    {"negative": "free plumbing video", "match_type": "exact"},
+    {"negative": "diy drain repair", "match_type": "exact"},
+    {"negative": "free estimate plumber", "match_type": "exact"},
+    {"negative": "local plumber", "match_type": "exact"}
+  ]
+}
