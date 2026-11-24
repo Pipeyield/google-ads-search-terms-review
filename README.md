@@ -1,21 +1,30 @@
 # Google Ads search terms review
 
-Your assistant reviews the search-term detail rows in your Google Ads export, groups them by likely intent and reports historical spend on proposed exclusions when the costs share a confirmed currency. The scripts recompute totals and compare proposed negatives with the supplied keywords and protected searches using literal text. Each proposed exclusion includes a reason and a match type. You decide what to add in Google Ads. Use this skill in an assistant that can run Python on your computer. The bundled scripts use Python's standard library and make no network calls. Your assistant's provider processes the export under its data terms. The skill needs no separate account or Google Ads connection.
+Give your assistant a Google Ads search terms export. Your assistant flags searches that look off-target and gives a reason for each proposed exclusion. It suggests negative keywords with match types and checks them for literal conflicts with protected searches and supplied keywords. You decide what to add in Google Ads.
 
-## Install
+**Example (made-up plumbing account, October):** about $140 of $1,420.50 (9.9%) goes to 4 searches you can exclude, for example two job searches covered by one phrase negative `"jobs"`. The checker rejected the phrase negative `"free"` because it matched the keyword `"free estimate"` and the converting search `free estimate plumber`. The vague search "pipe help" is left for you to judge. See the [example export](tests/example-made-up-account.csv).
 
-Python 3.10+ must be on the path for the commands shown here, or your assistant can use the interpreter’s full path. If local Python cannot run, quote available searches in source order under **Unchecked** for manual review. Give no intent labels, totals or negative keywords.
+## Install (3 steps)
 
-- **Claude Code.** Copy the entire `skills/google-ads-search-terms-review/` folder into `.claude/skills/` in your project or `~/.claude/skills/` for your own projects. Use `/google-ads-search-terms-review` or ask Claude to review the report.
-- **Other assistants that read skills.** Copy or import that same folder into the assistant's skills location. Keep `SKILL.md`, `references/` and `scripts/` together. Use a host that can read the export and run local Python 3.10 or later.
+1. Copy the `skills/google-ads-search-terms-review/` folder into `.claude/skills/` (this project) or `~/.claude/skills/` (all projects). Other assistants that read skills: import the same folder and keep `SKILL.md`, `references/` and `scripts/` together.
+2. In Google Ads, open **Campaigns → Insights and reports → Search terms**. Choose a date range, such as the last 90 days, and download a CSV or Excel `.xlsx` file.
+3. Attach or paste the report and ask your assistant to review it. In Claude Code, you can also run `/google-ads-search-terms-review`. Tell it what you sell and where.
 
-In Google Ads, open **Campaigns → Insights and reports → Search terms**. Export a CSV or Excel .xlsx file, or paste the full comma-, semicolon- or tab-separated text. Save older .xls files as .xlsx or CSV first. Use English report headings. The reader accepts periods or commas for decimals when the number format is clear. Your assistant asks you to confirm the column mapping before reporting figures. Include a `Search term` column, and Cost, Clicks, Conversions, Campaign, Ad group and Keyword if available. For `.xlsx`, supply one report sheet. The `Keyword` column identifies reported matches; for a paste-ready list, supply or confirm the full keyword inventory for the campaigns or ad groups where you intend to apply it. Tell the assistant what you sell and where.
+For a checked review, use an assistant that can run Python 3.10+ on your computer. The bundled scripts use only Python's standard library and make no network calls. The skill requires no Pipeyield account or sign-in and does not connect to your Google Ads account. Your assistant's provider processes the export under its own data terms.
 
-## Example: made-up account
+## What it can't tell
 
-The [example export](tests/example-made-up-account.csv) shows 8 searches costing $1,420.50 in October. Two job searches cost $90. The phrase negative `"jobs"` covers both. The assistant could also suggest `[free plumbing video]`. The checker rejects `"free"` because it literally matches the keyword and converting search for a free estimate. The assistant leaves “pipe help” for a person to check because it could mean advice or a service call. For this example, pass `--row-type 13=summary --row-type 14=summary --row-type 15=summary` after checking the three summary records.
+The review uses your export, your keyword and keep lists, and the business details you provide. It cannot identify individual customers or inspect live bids, budgets, change history, or unreported searches. The assistant can misread a search. Check high-spend rows before you exclude them.
 
-## What the review can tell
+## Details: inputs
+
+Export a CSV or Excel .xlsx file, or paste the full comma-, semicolon- or tab-separated text. Save older .xls files as .xlsx or CSV first. Use English report headings. The reader accepts periods or commas for decimals when the number format is clear. Your assistant asks you to confirm the column mapping before reporting figures. Include a `Search term` column, and Cost, Clicks, Conversions, Campaign, Ad group and Keyword if available. For `.xlsx`, supply one report sheet. The `Keyword` column identifies reported matches; for a paste-ready list, supply or confirm the full keyword inventory for the campaigns or ad groups where you intend to apply it. Python 3.10+ must be on the path for the commands shown here, or your assistant can use the interpreter’s full path. If local Python cannot run, quote available searches in source order under **Unchecked** for manual review. Give no intent labels, totals or negative keywords.
+
+## Details: the example
+
+The example export has 8 searches costing $1,420.50. The phrase negative `"jobs"` covers two job searches costing $90. The assistant could also suggest `[free plumbing video]`. For this example, pass `--row-type 13=summary --row-type 14=summary --row-type 15=summary` after checking the three summary records.
+
+## Details: input checks and limits
 
 Show the source record number and search text for every skipped summary. Check each against the original report. If its type is uncertain, withhold full-export totals and paste-ready negatives until it is confirmed. Pass the same confirmed `--row-type` decisions to every subsequent totals, row-listing and conflict-check run. The scripts ignore reviewer-decision columns in the export. Clear uploaded decisions in a working copy before the first run. Ask the user to confirm disputed records if the original report is inconclusive. Supply each confirmed decision as `--row-type RECORD=detail` or `--row-type RECORD=summary`. Repeat the option for additional decisions and use the row IDs from the confirmed run.
 
