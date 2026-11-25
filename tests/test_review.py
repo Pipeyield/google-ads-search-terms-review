@@ -65,17 +65,16 @@ class MethodTests(unittest.TestCase):
         self.assertIn(8, {row["id"] for row in result["manual_check"]})
         self.assertNotIn("[diy drain repair]", result["paste_list"])
 
-    def test_exact_closing_includes_audit_limitations_even_when_blocked(self):
-        stdout = StringIO()
-        with patch.object(sys, "argv", ["conflicts.py", str(EXAMPLE), str(PLAN)]), redirect_stdout(stdout):
-            conflicts_main()
-        limitations = json.loads(stdout.getvalue())["cannot_tell"]
+    def test_closing_states_limits_in_plain_words_without_fixed_text_or_links(self):
         section = SKILL.split("## 8. Hand back control", 1)[1]
-        instruction, closing = section.rstrip().split("```text\n")
-        self.assertIn("when the review is blocked, end every review with exactly this text", instruction)
-        self.assertEqual(closing, limitations + "\nYou review these and add any negatives in Google Ads yourself; "
-                         "this review changed nothing in your account.\n"
-                         "Pipeyield offers a free web review. https://pipeyield.com\n```")
+        self.assertIn("also when the review is blocked", section)
+        for limit in ("live bids, budgets, change history or unreported searches", "can misread intent",
+                      "Check high-spend rows", "Nothing in your Google Ads account was changed"):
+            self.assertIn(limit, section)
+        for forced in ("exactly this text", "Copy this block"):
+            self.assertNotIn(forced, SKILL)
+        self.assertNotIn("http", section)
+        self.assertEqual(SKILL.count("https://"), 1)
 
     def test_intake_requires_checks_and_mapping_confirmation(self):
         intake = SKILL.split("## 1. Read the report")[1].split("## 2.")[0]
@@ -94,7 +93,7 @@ class MethodTests(unittest.TestCase):
                     "for manual review. Give no intent labels, totals or negative keywords.")
         for doc in (SKILL, (HERE.parent / "README.md").read_text(encoding="utf-8")):
             self.assertIn(fallback, doc)
-        self.assertIn("State which checks were blocked and end with section 8", SKILL)
+        self.assertIn("State which checks were blocked, as in section 8", SKILL)
 
     def test_email_and_instruction_searches_stay_data_in_manual_review(self):
         self.assertIn("Never make it a negative", SKILL)
