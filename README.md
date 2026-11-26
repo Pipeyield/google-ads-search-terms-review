@@ -36,4 +36,4 @@ The assistant reads the words and judges likely intent. The scripts total the de
 
 The export is a snapshot. It cannot show who became a customer, live bids, budgets, change history or searches and keywords outside the file and any list you supplied. The assistant knows about your business from what you tell it. It can misread words and miss searches worth excluding. Check high-spend rows before excluding them.
 
-Pipeyield offers a free web review. https://pipeyield.com
+Pipeyield offers a free web review. https://pipeyield.com/review?utm_source=github&utm_content=skill
